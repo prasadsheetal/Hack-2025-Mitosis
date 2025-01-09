@@ -11,11 +11,6 @@ from flask import (
 app = Flask(__name__)
 
 
-# @app.route("/", methods=["GET"])
-# def root():
-#     return render_template("base.html")
-
-
 @app.route("/", methods=["GET"])
 def get_antibodies():
     antibodies_query = request.args.get("query", "")
@@ -43,12 +38,14 @@ def get_antibodies():
 
 @app.route("/compound-image", methods=["GET"], endpoint="get_compound_image")
 def get_compound_image():
-    smiles = request.args.get("smiles", "example_antibody")
-    image_file = "example_antibody.jpeg"
+    smiles = request.args.get("smiles", "")
+    id_value = smiles.split("=")[1]
+    image_dir = "static"
+    image_file = f"{id_value}.jpeg"
     # highlighted_substructure = request.args.get("highlight", "")
     # if highlighted_substructure == "":
     try:
-        return send_from_directory("/static", image_file, mimetype="image/jpeg")
+        return send_from_directory(image_dir, image_file, mimetype="image/jpeg")
     except FileNotFoundError:
         return "Image not found", 404
     # else:
