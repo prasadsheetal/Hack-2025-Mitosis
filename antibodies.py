@@ -2,20 +2,14 @@ from Bio import SeqIO
 from rich.console import Console
 from rich.text import Text
 
-EXAMPLE_ANTIBODIES = [
-    # placeholder
-    "ATGCTAGCTAGCTAGCTA",
-    "TCGATCGTAGCTAGATCT",
-    "GCTAGCTCGATCGATCGA"
-]
 
 def search_and_highlight(query, fasta_file):
     # Initialize a console for printing
     console = Console()
-    
+
     # Read sequences from the FASTA file
     sequences = SeqIO.parse(fasta_file, "fasta")
-    
+
     # Loop through each sequence
     for record in sequences:
         sequence_str = str(record.seq)
@@ -34,6 +28,7 @@ def search_and_highlight(query, fasta_file):
             # Print the result
             console.print(f"> {record.id} {record.description}")
             console.print(highlighted_text)
+
 
 # Example usage
 search_query = input("Enter the sequence query: ").upper()
