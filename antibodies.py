@@ -2,44 +2,45 @@ from Bio import SeqIO
 from rich.console import Console
 from rich.text import Text
 
-EXAMPLE_ANTIBODIES = [
-    # placeholder
-    "ATGCTAGCTAGCTAGCTA",
-    "TCGATCGTAGCTAGATCT",
-    "GCTAGCTCGATCGATCGA"
-]
 
-def search_and_highlight(query, fasta_file):
-    # Initialize a console for printing
-    console = Console()
-    
-    # Read sequences from the FASTA file
-    sequences = SeqIO.parse(fasta_file, "fasta")
-    
-    # Loop through each sequence
-    for record in sequences:
+def search_and_store_indices(query, fasta_file_path):
+    results = {}
+
+    # Parse the FASTA file and look for the query
+    for record in SeqIO.parse(fasta_file_path, "fasta"):
         sequence_str = str(record.seq)
-        if query in sequence_str:
-            # Highlight the matching part in the sequence
-            highlighted_text = Text(sequence_str)
-            start = 0
-            while True:
-                start = sequence_str.find(query, start)
-                if start == -1:
-                    break
-                # Add highlight for each match
-                highlighted_text.stylize("bold red", start, start + len(query))
-                start += len(query)  # Move past this match
+        matches = {}
 
-            # Print the result
-            console.print(f"> {record.id} {record.description}")
-            console.print(highlighted_text)
+        # Find all occurrences of the query and store indices and characters
+        start = 0
+        while True:
+            start = sequence_str.find(query, start)
+            if start == -1:
+                break
+            for i in range(start, start + len(query)):
+                matches[i] = sequence_str[i]  # Map index to character
+            start += len(query)  # Move past this match
+
+        # Add matches to results if any were found
+        if matches:
+            results[record.id] = {"description": record.description, "matches": matches}
+
+    return results
+
 
 # Example usage
 search_query = input("Enter the sequence query: ").upper()
 fasta_file_path = "sequences.fasta"
-search_and_highlight(search_query, fasta_file_path)
+results = search_and_store_indices(search_query, fasta_file_path)
 
+# Print the results
+for seq_id, data in results.items():
+    print(f"Sequence ID: {seq_id}")
+    print(f"Description: {data['description']}")
+    print("Matches:")
+    for index, char in data["matches"].items():
+        print(f"  Index: {index}, Character: {char}")
+    print()
 
 ''' reference code from the demo
 
