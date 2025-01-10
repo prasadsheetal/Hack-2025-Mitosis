@@ -14,7 +14,6 @@ def search_and_store_indices(query, fasta_file_path):
         start = 0
         while True:
             start = sequence_str.find(query.upper(), start)
-            print(start)
             if start == -1:
                 break
             for i in range(start, start + len(query)):
@@ -23,7 +22,13 @@ def search_and_store_indices(query, fasta_file_path):
 
         # Add matches to results if any were found
         if matches:
-            results.append({"description": record.description, "matches": matches})
+            results.append(
+                {
+                    "description": record.description,
+                    "matches": matches,
+                    "sequence": sequence_str,
+                }
+            )
     return results
 
 

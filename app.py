@@ -20,13 +20,15 @@ def get_antibodies():
 
     app.logger.info(f"Loaded {len(all_antibodies)} antibodies.")
 
+    highlights = []
     if len(antibodies_query) > 0:
         matches = search_and_store_indices(
             antibodies_query, "sequences.fasta"
         )  # fasta file path hardcoded for demo
         matches_list = []
         for match in matches:
-            id, chain, type, genus, sequence = match["description"].split("|")
+            id, chain, type, genus, _ = match["description"].split("|")
+            sequence = match["sequence"]
             matches_list.append(
                 {
                     "id": id,
@@ -36,6 +38,8 @@ def get_antibodies():
                     "sequence": sequence,
                 }
             )
+        for match in matches:
+            highlights.append(match["matches"])
         antibodies_matching_query = matches_list
     else:
         antibodies_matching_query = all_antibodies
@@ -44,6 +48,7 @@ def get_antibodies():
         "antibodies.html",
         antibodies_list=antibodies_matching_query,
         antibodies_query=antibodies_query,
+        highlights=highlights,
     )
 
 
