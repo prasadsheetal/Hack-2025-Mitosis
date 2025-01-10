@@ -4,8 +4,7 @@ from rich.text import Text
 
 
 def search_and_store_indices(query, fasta_file_path):
-    results = {}
-
+    results = []
     # Parse the FASTA file and look for the query
     for record in SeqIO.parse(fasta_file_path, "fasta"):
         sequence_str = str(record.seq)
@@ -14,7 +13,8 @@ def search_and_store_indices(query, fasta_file_path):
         # Find all occurrences of the query and store indices and characters
         start = 0
         while True:
-            start = sequence_str.find(query, start)
+            start = sequence_str.find(query.upper(), start)
+            print(start)
             if start == -1:
                 break
             for i in range(start, start + len(query)):
@@ -23,24 +23,23 @@ def search_and_store_indices(query, fasta_file_path):
 
         # Add matches to results if any were found
         if matches:
-            results[record.id] = {"description": record.description, "matches": matches}
-
+            results.append({"description": record.description, "matches": matches})
     return results
 
 
 # Example usage
-search_query = input("Enter the sequence query: ").upper()
-fasta_file_path = "sequences.fasta"
-results = search_and_store_indices(search_query, fasta_file_path)
+# search_query = input("Enter the sequence query: ").upper()
+# fasta_file_path = "sequences.fasta"
+# results = search_and_store_indices(search_query, fasta_file_path)
 
-# Print the results
-for seq_id, data in results.items():
-    print(f"Sequence ID: {seq_id}")
-    print(f"Description: {data['description']}")
-    print("Matches:")
-    for index, char in data["matches"].items():
-        print(f"  Index: {index}, Character: {char}")
-    print()
+# # Print the results
+# for seq_id, data in results.items():
+#     print(f"Sequence ID: {seq_id}")
+#     print(f"Description: {data['description']}")
+#     print("Matches:")
+#     for index, char in data["matches"].items():
+#         print(f"  Index: {index}, Character: {char}")
+#     print()
 
 ''' reference code from the demo
 
