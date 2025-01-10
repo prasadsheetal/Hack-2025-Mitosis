@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, send_from_directory, jsonify
 import json
+from antibodies import search_and_store_indices
 
 app = Flask(__name__)
 
@@ -31,26 +32,73 @@ def style_sequence(sequence, query):
     return "".join(styled_sequence)
 
 
+# @app.route("/", methods=["GET"])
+# def get_antibodies():
+#     antibodies_query = request.args.get("query", "").lower()
+#     json_file = "sequences.json"
+
+#     try:
+#         with open(json_file, "r") as file:
+#             all_antibodies = json.load(file)
+#     except FileNotFoundError:
+#         return "Error: sequences.json file not found.", 500
+
+#     for antibody in all_antibodies:
+#         antibody["styled_sequence"] = style_sequence(
+#             antibody["sequence"], antibodies_query
+#         )
+
+#     return render_template(
+#         "antibodies.html",
+#         antibodies_list=all_antibodies,
+#         antibodies_query=antibodies_query,
+#     )
+
+
 @app.route("/", methods=["GET"])
 def get_antibodies():
+
     antibodies_query = request.args.get("query", "").lower()
-    json_file = "sequences.json"
+    all_antibodies = []
 
     try:
-        with open(json_file, "r") as file:
+        with open("sequences.json", "r") as file:
             all_antibodies = json.load(file)
     except FileNotFoundError:
+        app.logger.error("sequences.json file not found.")
         return "Error: sequences.json file not found.", 500
 
-    for antibody in all_antibodies:
-        antibody["styled_sequence"] = style_sequence(
-            antibody["sequence"], antibodies_query
-        )
+    app.logger.info(f"Loaded {len(all_antibodies)} antibodies.")
+
+    highlights = []
+    if len(antibodies_query) > 0:
+        matches = search_and_store_indices(
+            antibodies_query, "sequences.fasta"
+        )  # fasta file path hardcoded for demo
+        matches_list = []
+        for match in matches:
+            id, chain, type, genus, _ = match["description"].split("|")
+            sequence = match["sequence"]
+            matches_list.append(
+                {
+                    "id": id,
+                    "chain": chain,
+                    "type": type,
+                    "genus": genus,
+                    "sequence": style_sequence(sequence, antibodies_query),
+                }
+            )
+        for match in matches:
+            highlights.append(match["matches"])
+        antibodies_matching_query = matches_list
+    else:
+        antibodies_matching_query = all_antibodies
 
     return render_template(
         "antibodies.html",
-        antibodies_list=all_antibodies,
+        antibodies_list=antibodies_matching_query,
         antibodies_query=antibodies_query,
+        highlights=highlights,
     )
 
 
