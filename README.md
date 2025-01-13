@@ -1,50 +1,37 @@
-# Hacking the Gender Stack 2025
+# Hack-2025-Mitosis
 
-This template can be used as a starting point for developing your own application during the hackathon. The template is a [Flask](https://flask.palletsprojects.com/en/stable/) project - you can find a quick tutorial about Flask and its best practices [here](https://flask.palletsprojects.com/en/stable/tutorial/).
+A web application built during Hack-2025 to showcase antibody sequences and their dynamic substring highlighting functionality.
 
-## Common commands
-```sh
-# To install/update the project's dependencies
-$> pip install -r requirements.txt
+## Features
 
-# To start the server
-$> python -m flask run
-```
+- Search for substrings in antibody sequences, and the matches are dynamically highlighted in red.
+- Display antibody details such as ID, type, and full sequence in a card-based layout.
+- Interactive and responsive design using Flask and Bootstrap.
 
-## Starter code
+## Demo
 
-We've provided you with some starter boilerplate code that should enable your team to quickly prototype your application.
+![<img width="1692" alt="image" src="https://github.com/user-attachments/assets/91fad5d3-c90e-4acd-b086-0bd4992863e2" />
+](static/demo-screenshot.png)
 
-### `app.py`
+## Technologies Used
 
-The entrypoint for your flask application is in the `app.py` module. The `flask run` command is set up to automatically find and run the flask application defined in this module. You can add more modules to add additional functionality as your project needs it (like the `chemistry.py` module in the [demo](https://github.com/schrodinger/hacking-the-gender-stack-2025-demo)).
+- **Python** (Flask): Backend framework for serving the application and processing data.
+- **HTML** / **CSS**: Frontend structure and styling.
+- **Bootstrap**: For responsive UI components.
+- **JSON**: To store and serve antibody sequence data.
 
-### `templates/base.html`
+## Installation
 
-We've included a base Jinja template that we recommend extending in any of your own templates (learn more about extending templates [here](https://jinja.palletsprojects.com/en/stable/templates/#template-inheritance)):
+Follow these steps to run the application locally:
 
-```html
-<!-- templates/my-template.html -->
+### Prerequisites
 
-{% extends "base.html" %}
+- Python 3.7 or higher installed.
+- Git installed.
 
-{% block content %}
-<p>
-  The HTML markup for your page should be included in the 'content' block
-</p>
-{% endblock %}
+### Steps
 
-{% block styles %}
-<style>
-  // Any custom CSS you may need to write should be included in a style tag within the 'styles' block
-</style>
-{% endblock %}
-
-{% block scripts %}
-<script>
-  // Any JavaScript you write should be included in the 'scripts' block
-</script>
-{% endblock %}
-```
-
-The base template includes [Bootstrap](https://getbootstrap.com/), a frontend toolkit, to allow you to quickly create polished UI elements. You can learn more about Bootstrap [here](https://getbootstrap.com/docs/5.3/getting-started/introduction/). (NOTE: The base template includes a maximal bundle of Bootstrap utilities that includes all necessary modules for supporting advanced features like tooltips and [Bootstrap icons](https://icons.getbootstrap.com/))
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/prasadsheetal/Hack-2025-Mitosis.git
+   cd Hack-2025-Mitosis
