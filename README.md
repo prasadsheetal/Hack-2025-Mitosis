@@ -1,4 +1,4 @@
-# Hack-2025-Mitosis
+# AI-Powered Antibody Sequence Analysis & Classification
 
 A web application built during Hack-2025 to showcase antibody sequences and their dynamic substring highlighting functionality.
 
